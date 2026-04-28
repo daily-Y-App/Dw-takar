@@ -501,7 +501,18 @@
             btn.style.display = 'none';
             loading.style.display = 'block';
 
-            auth.signInWithPopup(provider).then((result) => {
+            // Use signInWithRedirect instead of signInWithPopup
+            auth.signInWithRedirect(provider).catch(err => {
+                console.error("Login Error:", err);
+                alert("Login Failed: " + err.message);
+                loading.style.display = 'none';
+                btn.style.display = 'flex';
+            });
+        }
+
+        // Handle redirect result
+        auth.getRedirectResult().then((result) => {
+            if (result.user) {
                 currentUser = result.user;
                 profile.email = result.user.email;
                 profile.name = result.user.displayName || 'User';
@@ -512,15 +523,14 @@
                 closeModal('loginModal');
                 syncToFirebase();
                 
-                loading.style.display = 'none';
-                btn.style.display = 'flex';
-            }).catch(err => {
-                console.error("Login Error:", err);
-                alert("Login Failed: " + err.message);
-                loading.style.display = 'none';
-                btn.style.display = 'flex';
-            });
-        }
+                const loading = document.getElementById('loginLoading');
+                const btn = document.getElementById('googleLoginBtn');
+                if (loading) loading.style.display = 'none';
+                if (btn) btn.style.display = 'flex';
+            }
+        }).catch(err => {
+            console.error("Redirect Result Error:", err);
+        });
 
         function logout() {
             auth.signOut().then(() => {
