@@ -7,7 +7,7 @@
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root {
@@ -51,6 +51,25 @@
             border: 2px solid rgba(255,255,255,0.4);
             display: flex; align-items: center; justify-content: center; 
             font-size: 24px; cursor: pointer;
+        }
+
+        /* Reward Tag UI */
+        .reward-tag {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 11px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .lang-top { 
@@ -120,6 +139,13 @@
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; justify-content:center; align-items:center; backdrop-filter: blur(5px); }
         .modal-content { background:white; width:85%; border-radius:25px; padding:30px; text-align:center; }
 
+        /* Login Button UI */
+        .btn-google {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 14px; background: white; border: 1px solid #ddd;
+            border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 20px;
+        }
+
         .text-plus { color: #10b981; font-weight: bold; }
         .text-minus { color: #ef4444; font-weight: bold; }
     </style>
@@ -130,10 +156,13 @@
         <div class="user-info">
             <div class="profile-photo" id="headAv" onclick="showPage('profile')">👷</div>
             <div>
-                <div id="headName" style="font-weight: 700; font-size: 18px;">User</div>
-                <div id="headCode" style="font-size: 12px; opacity: 0.8;">CODE: EMP001</div>
+                <div id="headName" style="font-weight: 700; font-size: 16px;">User</div>
+                <div id="headCode" style="font-size: 10px; opacity: 0.8;">EMP001</div>
             </div>
         </div>
+        
+        <div class="reward-tag" onclick="showPage('rewards')">🎁 REWARD</div>
+
         <select class="lang-top" id="topLang" onchange="setLang(this.value)">
             <option value="my">🇲🇲 MY</option>
             <option value="en">🇺🇸 EN</option>
@@ -186,6 +215,17 @@
             </div>
         </div>
 
+        <div id="rewards" class="page">
+            <div class="card" style="text-align: center;">
+                <h2 style="margin-bottom: 10px;">🎁 Daily Rewards</h2>
+                <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 20px;">နေ့စဉ် App ဝင်ပြီး ဆုကြေးများ ရယူပါ။</p>
+                <div style="font-size: 50px; margin-bottom: 10px;">💰</div>
+                <div id="pointsDisplay" style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">0 Points</div>
+                <button class="btn-save" id="claimBtn" onclick="claimDailyReward()">🎁 Claim 50 Points</button>
+                <p id="rewardMsg" style="margin-top: 15px; font-size: 12px; color: #b21f1f;"></p>
+            </div>
+        </div>
+
         <div id="history" class="page">
             <div id="historyList"></div>
             <div style="text-align: center; margin-top: 15px;">
@@ -219,8 +259,19 @@
                 <div class="form-group"><label>တနေ့လုပ်အားခ</label><input type="number" id="pWage"></div>
                 <div class="form-group"><label>OT နာရီခ</label><input type="number" id="pOt"></div>
                 <button class="btn-save" onclick="saveProfile()">💾 Update Profile</button>
-                <button class="btn-save" style="margin-top:10px; background:#0f172a;" onclick="window.location.href='https://daily-y-app.github.io/Battle-wage/'">⚔️ GO TO BATTLE</button>
+                <button class="btn-save" style="margin-top:20px; background:#ef4444;" onclick="logout()">🚪 Logout</button>
             </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:10px;">👋 Welcome!</h2>
+            <p style="color:var(--text-sub); font-size:14px;">App အသုံးပြုရန် Login အရင်ဝင်ပေးပါ။</p>
+            <button class="btn-google" onclick="loginWithGoogle()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+                Sign in with Gmail
+            </button>
         </div>
     </div>
 
@@ -249,11 +300,57 @@
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
 
         let records = JSON.parse(localStorage.getItem('f_recs')) || [];
-        let profile = JSON.parse(localStorage.getItem('f_prof')) || { name:'User', code:'EMP001', wage:375, ot:69, lang:'my', av: '👷' };
+        let profile = JSON.parse(localStorage.getItem('f_prof')) || { name:'User', code:'EMP001', wage:375, ot:69, lang:'my', av: '👷', points: 0, lastClaim: '' };
         let myChart = null;
 
+        // --- Auth Functions ---
+        function loginWithGoogle() {
+            auth.signInWithPopup(provider).then((result) => {
+                profile.name = result.user.displayName;
+                profile.code = result.user.email.split('@')[0];
+                updateHeader();
+                localStorage.setItem('f_prof', JSON.stringify(profile));
+                closeModal('loginModal');
+                syncToFirebase();
+            }).catch(err => alert("Login Failed: " + err.message));
+        }
+
+        function logout() {
+            auth.signOut().then(() => {
+                location.reload();
+            });
+        }
+
+        // --- Reward Functions ---
+        function claimDailyReward() {
+            const today = new Date().toDateString();
+            if (profile.lastClaim === today) {
+                document.getElementById('rewardMsg').innerText = "ယနေ့အတွက် ဆုယူပြီးပါပြီ။ မနက်ဖြန်မှ ပြန်လာခဲ့ပါ။";
+                return;
+            }
+            
+            profile.points = (profile.points || 0) + 50;
+            profile.lastClaim = today;
+            localStorage.setItem('f_prof', JSON.stringify(profile));
+            updateRewardUI();
+            syncToFirebase();
+            alert("ဂုဏ်ယူပါတယ်! 50 Points ရရှိပါပြီ။");
+        }
+
+        function updateRewardUI() {
+            document.getElementById('pointsDisplay').innerText = (profile.points || 0) + " Points";
+            const today = new Date().toDateString();
+            if (profile.lastClaim === today) {
+                document.getElementById('claimBtn').innerText = "Claimed Today ✅";
+                document.getElementById('claimBtn').style.opacity = "0.6";
+            }
+        }
+
+        // --- Core Functions ---
         const langMap = {
             my: { income:"ဝင်ငွေ", expense:"ထွက်ငွေ", history:"မှတ်တမ်း", balance:"လက်ကျန်", graph:"ဂရပ်", profile:"ကိုယ်ရေး", date:"ရက်စွဲ", save:"သိမ်းမည်", totalBal:"စုစုပေါင်းလက်ကျန်ငွေ", work:"ရက်ပေါင်း", hours:"အလုပ်ချိန်", ot:"OT", clear:"စာရင်းဖျက်ရန်", amount:"ပမာဏ", cat:"အမျိုးအစား", extra:"အပိုဝင်ငွေ" },
             en: { income:"Income", expense:"Expense", history:"History", balance:"Balance", graph:"Graph", profile:"Profile", date:"Date", save:"Save", totalBal:"Total Balance", work:"Days", hours:"Hours", ot:"OT", clear:"Clear All", amount:"Amount", cat:"Category", extra:"Extra" },
@@ -264,7 +361,6 @@
             profile.lang = l;
             localStorage.setItem('f_prof', JSON.stringify(profile));
             const d = langMap[l];
-            // Find all elements with class starting with 't-'
             document.querySelectorAll('[class*="t-"]').forEach(el => {
                 const classes = Array.from(el.classList);
                 const targetClass = classes.find(c => c.startsWith('t-'));
@@ -280,23 +376,24 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             
-            // Activate correct nav item
             const idx = ['income', 'expense', 'history', 'balance', 'graph'].indexOf(id);
             if(idx !== -1) document.querySelectorAll('.nav-item')[idx].classList.add('active');
 
             if(id === 'balance') updateBalance();
             if(id === 'history') renderList();
             if(id === 'graph') renderGraph();
+            if(id === 'rewards') updateRewardUI();
         }
 
         function syncToFirebase() {
-            db.ref('users/' + profile.code).set({ profile, records, lastUpdate: new Date().toISOString() });
+            if(auth.currentUser) {
+                db.ref('users/' + profile.code).set({ profile, records, lastUpdate: new Date().toISOString() });
+            }
         }
 
         function saveData(type) {
             const date = document.getElementById(type==='income'?'iDate':'eDate').value;
             if(!date) return alert("Please select date");
-            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
             let amt = 0, cat = "", det = null;
             if(type === 'income') {
@@ -311,7 +408,7 @@
                 cat = document.getElementById('eCat').value === 'custom' ? document.getElementById('customCat').value : document.getElementById('eCat').value;
             }
 
-            records.push({ id:Date.now(), type, date, time, amt, category:cat, details:det });
+            records.push({ id:Date.now(), type, date, amt, category:cat, details:det });
             localStorage.setItem('f_recs', JSON.stringify(records));
             syncToFirebase();
             document.getElementById('successModal').style.display = 'flex';
@@ -331,10 +428,9 @@
             document.getElementById('otTotal').innerText = otTotalHrs;
 
             document.getElementById('breakdownList').innerHTML = `
-                <div class="breakdown-item"><span>💰 Basic Wage</span><span class="text-plus">+${wageTotal.toFixed(0)}฿</span></div>
-                <div class="breakdown-item"><span>⏱️ OT Pay</span><span class="text-plus">+${otCash.toFixed(0)}฿</span></div>
-                <div class="breakdown-item"><span>💵 Extra</span><span class="text-plus">+${extraTotal.toFixed(0)}฿</span></div>
-                <div class="breakdown-item"><span>📉 Expenses</span><span class="text-minus">-${expTotal.toFixed(0)}฿</span></div>
+                <div class="card" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>💰 Basic Wage</span><span class="text-plus">+${wageTotal.toFixed(0)}฿</span></div>
+                <div class="card" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>⏱️ OT Pay</span><span class="text-plus">+${otCash.toFixed(0)}฿</span></div>
+                <div class="card" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>📉 Expenses</span><span class="text-minus">-${expTotal.toFixed(0)}฿</span></div>
             `;
         }
 
@@ -375,7 +471,7 @@
             profile.wage = parseFloat(document.getElementById('pWage').value);
             profile.ot = parseFloat(document.getElementById('pOt').value);
             localStorage.setItem('f_prof', JSON.stringify(profile));
-            updateHeader(); syncToFirebase(); alert("Saved!");
+            updateHeader(); syncToFirebase(); alert("Profile Updated!");
         }
 
         function updateHeader() {
@@ -393,6 +489,16 @@
         }
 
         window.onload = () => {
+            // Check Auth State
+            auth.onAuthStateChanged(user => {
+                if (!user) {
+                    document.getElementById('loginModal').style.display = 'flex';
+                } else {
+                    profile.name = user.displayName;
+                    updateHeader();
+                }
+            });
+
             document.getElementById('iDate').valueAsDate = new Date();
             document.getElementById('eDate').valueAsDate = new Date();
             document.getElementById('pName').value = profile.name;
@@ -404,4 +510,4 @@
         };
     </script>
 </body>
-</html>
+                </html>
