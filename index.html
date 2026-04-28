@@ -482,6 +482,7 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const auth = firebase.auth();
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         const provider = new firebase.auth.GoogleAuthProvider();
 
         let records = JSON.parse(localStorage.getItem('f_recs')) || [];
@@ -518,15 +519,23 @@
                 profile.name = result.user.displayName || 'User';
                 profile.code = result.user.email.split('@')[0];
                 
-                localStorage.setItem('f_prof', JSON.stringify(profile));
-                updateHeader();
-                closeModal('loginModal');
-                syncToFirebase();
-                
-                const loading = document.getElementById('loginLoading');
-                const btn = document.getElementById('googleLoginBtn');
-                if (loading) loading.style.display = 'none';
-                if (btn) btn.style.display = 'flex';
+                // Fetch existing data from Firebase
+                db.ref('users/' + profile.code).once('value').then(snap => {
+                    if (snap.exists()) {
+                        const data = snap.val();
+                        profile = data.profile || profile;
+                        records = data.records || records;
+                    }
+                    localStorage.setItem('f_prof', JSON.stringify(profile));
+                    localStorage.setItem('f_recs', JSON.stringify(records));
+                    updateHeader();
+                    closeModal('loginModal');
+                    
+                    const loading = document.getElementById('loginLoading');
+                    const btn = document.getElementById('googleLoginBtn');
+                    if (loading) loading.style.display = 'none';
+                    if (btn) btn.style.display = 'flex';
+                });
             }
         }).catch(err => {
             console.error("Redirect Result Error:", err);
@@ -864,10 +873,20 @@
                     currentUser = user;
                     profile.email = user.email;
                     profile.name = user.displayName || profile.name;
-                    localStorage.setItem('f_prof', JSON.stringify(profile));
-                    updateHeader();
-                    document.getElementById('userEmail').innerText = user.email;
-                    document.getElementById('loginModal').style.display = 'none';
+                    
+                    // Sync from Firebase to ensure local data is up to date
+                    db.ref('users/' + user.email.split('@')[0]).once('value').then(snap => {
+                        if (snap.exists()) {
+                            const data = snap.val();
+                            profile = data.profile || profile;
+                            records = data.records || records;
+                            localStorage.setItem('f_prof', JSON.stringify(profile));
+                            localStorage.setItem('f_recs', JSON.stringify(records));
+                        }
+                        updateHeader();
+                        document.getElementById('userEmail').innerText = user.email;
+                        document.getElementById('loginModal').style.display = 'none';
+                    });
                 }
             });
 
