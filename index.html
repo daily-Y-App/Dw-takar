@@ -7,7 +7,9 @@
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fingerprintjs2@2.1.0/dist/fingerprint2.min.js"></script>
     
     <style>
         :root {
@@ -18,6 +20,8 @@
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-sub: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -121,33 +125,138 @@
         /* --- Forms --- */
         .form-group { margin-bottom: 18px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-sub); }
-        input, select { 
+        input, select, textarea { 
             width: 100%; padding: 14px; border: 2px solid #edf2f7; 
             border-radius: 12px; font-size: 16px; outline: none;
+            font-family: inherit;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
         }
         .counter-group { display: flex; align-items: center; gap: 10px; }
         .c-btn { 
             width: 45px; height: 45px; border-radius: 10px; border: none; 
             background: #f1f5f9; font-size: 20px; cursor: pointer;
+            transition: 0.2s;
         }
+        .c-btn:hover { background: #e2e8f0; }
         .btn-save { 
             width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             color: white; border: none; border-radius: 15px; font-weight: 700; cursor: pointer;
+            transition: 0.3s;
         }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
 
         /* Modals */
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; justify-content:center; align-items:center; backdrop-filter: blur(5px); }
-        .modal-content { background:white; width:85%; border-radius:25px; padding:30px; text-align:center; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; justify-content:center; align-items:center; backdrop-filter: blur(5px); overflow-y: auto; padding: 20px; }
+        .modal-content { background:white; width:90%; max-width:500px; border-radius:25px; padding:30px; text-align:center; }
 
         /* Login Button UI */
         .btn-google {
             display: flex; align-items: center; justify-content: center; gap: 10px;
             width: 100%; padding: 14px; background: white; border: 1px solid #ddd;
             border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 20px;
+            transition: 0.2s;
         }
+        .btn-google:hover { background: #f8f8f8; }
 
         .text-plus { color: #10b981; font-weight: bold; }
         .text-minus { color: #ef4444; font-weight: bold; }
+
+        /* Check-in Status */
+        .checkin-status {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .checkin-days {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .checkin-progress {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .checkin-progress-bar {
+            background: #10b981;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .withdrawal-section {
+            background: #f0f9ff;
+            border: 2px solid #0284c7;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .withdrawal-info {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #0284c7;
+        }
+
+        .qr-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .qr-code-image {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            margin: 5px;
+        }
+
+        .status-badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .device-info {
+            background: #f3f4f6;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-top: 10px;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -217,11 +326,21 @@
 
         <div id="rewards" class="page">
             <div class="card" style="text-align: center;">
-                <h2 style="margin-bottom: 10px;">🎁 Daily Rewards</h2>
+                <h2 style="margin-bottom: 10px;">🎁 Daily Check-in & Rewards</h2>
                 <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 20px;">နေ့စဉ် App ဝင်ပြီး ဆုကြေးများ ရယူပါ။</p>
+                
+                <div class="checkin-status">
+                    <div style="font-size: 14px; opacity: 0.9;">Consecutive Check-in Days</div>
+                    <div class="checkin-days" id="checkinDays">0</div>
+                    <div class="checkin-progress">
+                        <div class="checkin-progress-bar" id="checkinProgressBar" style="width: 0%"></div>
+                    </div>
+                    <div style="font-size: 12px; opacity: 0.9;">30 ရက်ပြည့်မှ ငွေထုတ်နိုင်</div>
+                </div>
+
                 <div style="font-size: 50px; margin-bottom: 10px;">💰</div>
                 <div id="pointsDisplay" style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">0 Points</div>
-                <button class="btn-save" id="claimBtn" onclick="claimDailyReward()">🎁 Claim 50 Points</button>
+                <button class="btn-save" id="claimBtn" onclick="claimDailyReward()">🎁 Today Check-in</button>
                 <p id="rewardMsg" style="margin-top: 15px; font-size: 12px; color: #b21f1f;"></p>
             </div>
         </div>
@@ -235,8 +354,8 @@
 
         <div id="balance" class="page">
             <div class="balance-hero">
-                <div class="t-totalBal">စုစုပေါင်းလက်ကျန်ငွေ</div>
-                <h1 id="totalBal" style="font-size: 36px; margin: 10px 0;">0฿</h1>
+                <div style="font-size: 13px; opacity: 0.9;">စုစုပေါင်းလက်ကျန်ငွေ</div>
+                <div id="totalBal" style="font-size: 40px; font-weight: bold; margin: 10px 0;">0฿</div>
                 <div style="font-size: 13px; opacity: 0.9;">
                     <span class="t-work">ရက်ပေါင်း</span>: <span id="workCount">0</span> | OT: <span id="otTotal">0</span> hr
                 </div>
@@ -251,6 +370,57 @@
             </div>
         </div>
 
+        <div id="withdrawal" class="page">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">💳 ငွေထုတ်ယူမည်</h2>
+                
+                <div class="checkin-status">
+                    <div style="font-size: 14px; opacity: 0.9;">ငွေထုတ်ခွင့်အခြေအနေ</div>
+                    <div id="withdrawalStatus" style="font-size: 18px; font-weight: bold; margin-top: 10px;">
+                        <span class="status-badge warning">⏳ 30 ရက်အောင် စောင့်ဆိုင်းခြင်း</span>
+                    </div>
+                </div>
+
+                <div class="withdrawal-section">
+                    <h3 style="margin-bottom: 15px;">ငွေထုတ်ယူမည့် အချက်အလက်</h3>
+                    
+                    <div class="withdrawal-info">
+                        <strong>လက်ကျန်ငွေ:</strong><br>
+                        <span id="availableBalance" style="font-size: 24px; font-weight: bold; color: var(--secondary);">0฿</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ငွေထုတ်မည့် ပမာဏ (฿)</label>
+                        <input type="number" id="withdrawAmount" placeholder="ပမာဏထည့်သွင်းပါ" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>ငွေလက်ခံသူ အမည်</label>
+                        <input type="text" id="withdrawName" placeholder="အမည်ထည့်သွင်းပါ">
+                    </div>
+
+                    <div class="form-group">
+                        <label>ဖုန်းနံပါတ်</label>
+                        <input type="tel" id="withdrawPhone" placeholder="0812345678">
+                    </div>
+
+                    <button class="btn-save" id="withdrawBtn" onclick="requestWithdrawal()" disabled>💳 ငွေထုတ်ယူမည်</button>
+                    <p id="withdrawMsg" style="margin-top: 15px; font-size: 12px;"></p>
+                </div>
+
+                <div id="qrSection" style="display: none;">
+                    <div class="qr-display">
+                        <h3 style="margin-bottom: 15px;">📱 QR Code ကို Scan ပြီး ငွေလွှဲပါ</h3>
+                        <div style="background: white; padding: 15px; border-radius: 10px; display: inline-block;">
+                            <img id="qrCodeImage" src="" alt="QR Code" class="qr-code-image">
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-sub); margin-top: 10px;">ငွေလွှဲပြီးနောက် အောက်ပါ ခလုတ်ကို နှိပ်ပါ</p>
+                        <button class="btn-save" onclick="confirmWithdrawal()" style="margin-top: 15px;">✅ ငွေလွှဲပြီးပါပြီ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="profile" class="page">
             <div class="card">
                 <h3 style="margin-bottom:15px;" class="t-profile">ကိုယ်ရေးအချက်အလက်</h3>
@@ -258,6 +428,12 @@
                 <div class="form-group"><label>ကုတ်နံပါတ်</label><input type="text" id="pCode"></div>
                 <div class="form-group"><label>တနေ့လုပ်အားခ</label><input type="number" id="pWage"></div>
                 <div class="form-group"><label>OT နာရီခ</label><input type="number" id="pOt"></div>
+                
+                <div class="device-info">
+                    <strong>Device ID:</strong><br>
+                    <span id="deviceId">Loading...</span>
+                </div>
+
                 <button class="btn-save" onclick="saveProfile()">💾 Update Profile</button>
                 <button class="btn-save" style="margin-top:20px; background:#ef4444;" onclick="logout()">🚪 Logout</button>
             </div>
@@ -267,7 +443,7 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <h2 style="margin-bottom:10px;">👋 Welcome!</h2>
-            <p style="color:var(--text-sub); font-size:14px;">App အသုံးပြုရန် Login အရင်ဝင်ပေးပါ။</p>
+            <p style="color:var(--text-sub); font-size:14px;">App အသုံးပြုရန် Gmail နဲ့ Login အရင်ဝင်ပေးပါ။</p>
             <button class="btn-google" onclick="loginWithGoogle()">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
                 Sign in with Gmail
@@ -275,12 +451,21 @@
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="showPage('income')"><span class="nav-icon">💰</span><span class="nav-text t-income">ဝင်ငွေ</span></div>
-        <div class="nav-item" onclick="showPage('expense')"><span class="nav-icon">💸</span><span class="nav-text t-expense">ထွက်ငွေ</span></div>
-        <div class="nav-item" onclick="showPage('history')"><span class="nav-icon">📜</span><span class="nav-text t-history">မှတ်တမ်း</span></div>
-        <div class="nav-item" onclick="showPage('balance')"><span class="nav-icon">🧮</span><span class="nav-text t-balance">လက်ကျန်</span></div>
-        <div class="nav-item" onclick="showPage('graph')"><span class="nav-icon">📊</span><span class="nav-text t-graph">ဂရပ်</span></div>
+    <div id="deviceConflictModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:10px; color: var(--danger);">⚠️ Device Conflict</h2>
+            <p style="color:var(--text-sub); font-size:14px; margin-bottom: 20px;">ဤ Gmail အကောင့်သည် အခြား ကွန်ပျူတာ/ဖုန်းတွင် အသုံးပြုထားပါသည်။</p>
+            <p style="color:var(--text-sub); font-size:12px; margin-bottom: 20px;">
+                <strong>Last Device:</strong><br>
+                <span id="lastDeviceInfo"></span>
+            </p>
+            <p style="color:var(--text-sub); font-size:12px; margin-bottom: 20px;">
+                <strong>Current Device:</strong><br>
+                <span id="currentDeviceInfo"></span>
+            </p>
+            <button class="btn-save" onclick="continueAnyway()">ဆက်လက်ခွင့်ပြုမည်</button>
+            <button class="btn-save" style="background:#888; margin-top:10px;" onclick="logout()">Logout</button>
+        </div>
     </div>
 
     <div id="successModal" class="modal"><div class="modal-content"><h2>✅ Success!</h2><button class="btn-save" style="margin-top:20px;" onclick="closeModal('successModal')">OK</button></div></div>
@@ -304,14 +489,72 @@
         const provider = new firebase.auth.GoogleAuthProvider();
 
         let records = JSON.parse(localStorage.getItem('f_recs')) || [];
-        let profile = JSON.parse(localStorage.getItem('f_prof')) || { name:'User', code:'EMP001', wage:375, ot:69, lang:'my', av: '👷', points: 0, lastClaim: '' };
+        let profile = JSON.parse(localStorage.getItem('f_prof')) || { 
+            name:'User', code:'EMP001', wage:375, ot:69, lang:'my', av: '👷', 
+            points: 0, lastClaim: '', deviceId: '', checkinDays: 0, lastCheckin: '',
+            withdrawalRequests: [], allowDeviceSwitch: false
+        };
         let myChart = null;
+        let deviceFingerprint = null;
+        let isDeviceConflict = false;
+
+        // --- Device Fingerprinting ---
+        async function generateDeviceFingerprint() {
+            return new Promise((resolve) => {
+                if (window.Fingerprint2) {
+                    Fingerprint2.get(function(components) {
+                        const values = components.map(function(component) { return component.value; });
+                        const fingerprint = Fingerprint2.x64hash128(values.join(''), 31);
+                        resolve(fingerprint);
+                    });
+                } else {
+                    // Fallback if Fingerprint2 is not available
+                    const fallback = navigator.userAgent + screen.width + screen.height + new Date().getTimezoneOffset();
+                    resolve(btoa(fallback).substring(0, 32));
+                }
+            });
+        }
+
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+            const browser = ua.includes('Chrome') ? 'Chrome' : ua.includes('Safari') ? 'Safari' : ua.includes('Firefox') ? 'Firefox' : 'Other';
+            const os = ua.includes('Windows') ? 'Windows' : ua.includes('Mac') ? 'macOS' : ua.includes('Linux') ? 'Linux' : ua.includes('Android') ? 'Android' : ua.includes('iPhone') ? 'iOS' : 'Unknown';
+            
+            return {
+                type: isMobile ? 'Mobile' : 'Desktop',
+                browser: browser,
+                os: os,
+                screen: `${screen.width}x${screen.height}`,
+                timestamp: new Date().toLocaleString('my-MM')
+            };
+        }
 
         // --- Auth Functions ---
         function loginWithGoogle() {
-            auth.signInWithPopup(provider).then((result) => {
+            auth.signInWithPopup(provider).then(async (result) => {
+                const currentFingerprint = await generateDeviceFingerprint();
+                const currentDeviceInfo = getDeviceInfo();
+                
                 profile.name = result.user.displayName;
                 profile.code = result.user.email.split('@')[0];
+                
+                // Check device conflict
+                if (profile.deviceId && profile.deviceId !== currentFingerprint) {
+                    isDeviceConflict = true;
+                    const lastDevice = profile.lastDeviceInfo || { type: 'Unknown', browser: 'Unknown', os: 'Unknown' };
+                    document.getElementById('lastDeviceInfo').innerHTML = 
+                        `${lastDevice.type} - ${lastDevice.browser} - ${lastDevice.os}`;
+                    document.getElementById('currentDeviceInfo').innerHTML = 
+                        `${currentDeviceInfo.type} - ${currentDeviceInfo.browser} - ${currentDeviceInfo.os}`;
+                    document.getElementById('deviceConflictModal').style.display = 'flex';
+                    return;
+                }
+                
+                profile.deviceId = currentFingerprint;
+                profile.lastDeviceInfo = currentDeviceInfo;
+                profile.allowDeviceSwitch = false;
+                
                 updateHeader();
                 localStorage.setItem('f_prof', JSON.stringify(profile));
                 closeModal('loginModal');
@@ -319,35 +562,180 @@
             }).catch(err => alert("Login Failed: " + err.message));
         }
 
+        function continueAnyway() {
+            profile.allowDeviceSwitch = true;
+            localStorage.setItem('f_prof', JSON.stringify(profile));
+            closeModal('deviceConflictModal');
+            syncToFirebase();
+        }
+
         function logout() {
             auth.signOut().then(() => {
+                localStorage.removeItem('f_prof');
+                localStorage.removeItem('f_recs');
                 location.reload();
             });
         }
 
-        // --- Reward Functions ---
+        // --- Check-in Functions ---
         function claimDailyReward() {
             const today = new Date().toDateString();
-            if (profile.lastClaim === today) {
-                document.getElementById('rewardMsg').innerText = "ယနေ့အတွက် ဆုယူပြီးပါပြီ။ မနက်ဖြန်မှ ပြန်လာခဲ့ပါ။";
+            const lastCheckin = profile.lastCheckin || '';
+            
+            if (lastCheckin === today) {
+                document.getElementById('rewardMsg').innerText = "ယနေ့အတွက် Check-in ပြီးပါပြီ။ မနက်ဖြန်မှ ပြန်လာခဲ့ပါ။";
                 return;
+            }
+            
+            // Check if it's consecutive day
+            const lastDate = lastCheckin ? new Date(lastCheckin) : null;
+            const todayDate = new Date();
+            
+            if (lastDate) {
+                const diffTime = todayDate - lastDate;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                    profile.checkinDays = (profile.checkinDays || 0) + 1;
+                } else if (diffDays > 1) {
+                    profile.checkinDays = 1; // Reset if not consecutive
+                }
+            } else {
+                profile.checkinDays = 1;
             }
             
             profile.points = (profile.points || 0) + 50;
             profile.lastClaim = today;
+            profile.lastCheckin = today;
+            
             localStorage.setItem('f_prof', JSON.stringify(profile));
             updateRewardUI();
             syncToFirebase();
-            alert("ဂုဏ်ယူပါတယ်! 50 Points ရရှိပါပြီ။");
+            
+            document.getElementById('rewardMsg').innerText = `✅ Check-in အောင်မြင်ပါပြီ! 50 Points ရရှိပါပြီ။ (${profile.checkinDays}/30 ရက်)`;
         }
 
         function updateRewardUI() {
             document.getElementById('pointsDisplay').innerText = (profile.points || 0) + " Points";
+            document.getElementById('checkinDays').innerText = profile.checkinDays || 0;
+            
+            const progressPercent = ((profile.checkinDays || 0) / 30) * 100;
+            document.getElementById('checkinProgressBar').style.width = progressPercent + '%';
+            
             const today = new Date().toDateString();
             if (profile.lastClaim === today) {
-                document.getElementById('claimBtn').innerText = "Claimed Today ✅";
+                document.getElementById('claimBtn').innerText = "✅ Today Claimed";
                 document.getElementById('claimBtn').style.opacity = "0.6";
+                document.getElementById('claimBtn').disabled = true;
+            } else {
+                document.getElementById('claimBtn').innerText = "🎁 Today Check-in";
+                document.getElementById('claimBtn').style.opacity = "1";
+                document.getElementById('claimBtn').disabled = false;
             }
+            
+            // Update withdrawal button
+            const canWithdraw = (profile.checkinDays || 0) >= 30;
+            updateWithdrawalUI(canWithdraw);
+        }
+
+        function updateWithdrawalUI(canWithdraw) {
+            const withdrawBtn = document.getElementById('withdrawBtn');
+            const withdrawalStatus = document.getElementById('withdrawalStatus');
+            
+            if (canWithdraw) {
+                withdrawBtn.disabled = false;
+                withdrawalStatus.innerHTML = '<span class="status-badge success">✅ ငွေထုတ်ခွင့်ရှိပါသည်</span>';
+            } else {
+                withdrawBtn.disabled = true;
+                const daysRemaining = 30 - (profile.checkinDays || 0);
+                withdrawalStatus.innerHTML = `<span class="status-badge warning">⏳ ${daysRemaining} ရက်ကျန်ရှိသည်</span>`;
+            }
+        }
+
+        // --- Withdrawal Functions ---
+        function requestWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const name = document.getElementById('withdrawName').value;
+            const phone = document.getElementById('withdrawPhone').value;
+            
+            if (!amount || amount <= 0) {
+                alert("ပမာဏကို ထည့်သွင်းပါ");
+                return;
+            }
+            if (!name) {
+                alert("အမည်ကို ထည့်သွင်းပါ");
+                return;
+            }
+            if (!phone) {
+                alert("ဖုန်းနံပါတ်ကို ထည့်သွင်းပါ");
+                return;
+            }
+            
+            // Calculate total balance
+            const inc = records.filter(r => r.type === 'income').reduce((a, b) => a + b.amt, 0);
+            const exp = records.filter(r => r.type === 'expense').reduce((a, b) => a + b.amt, 0);
+            const totalBalance = inc - exp;
+            
+            if (amount > totalBalance) {
+                alert("လက်ကျန်ငွေ မလုံလောက်ပါ");
+                return;
+            }
+            
+            // Generate QR Code (TrueMoney/PromptPay format)
+            const qrData = generateQRCode(amount, phone, name);
+            document.getElementById('qrCodeImage').src = qrData;
+            document.getElementById('qrSection').style.display = 'block';
+            
+            // Store withdrawal request
+            const withdrawalRequest = {
+                id: Date.now(),
+                amount: amount,
+                name: name,
+                phone: phone,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+            
+            profile.withdrawalRequests = profile.withdrawalRequests || [];
+            profile.withdrawalRequests.push(withdrawalRequest);
+            localStorage.setItem('f_prof', JSON.stringify(profile));
+        }
+
+        function generateQRCode(amount, phone, name) {
+            // Generate QR code using QR Server API (TrueMoney format)
+            // Format: https://promptpay.io/{phone}/{amount}
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://promptpay.io/${phone.replace(/[^0-9]/g, '')}/${amount}`;
+            return qrUrl;
+        }
+
+        function confirmWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const name = document.getElementById('withdrawName').value;
+            const phone = document.getElementById('withdrawPhone').value;
+            
+            // Deduct from balance
+            records.push({
+                id: Date.now(),
+                type: 'withdrawal',
+                date: new Date().toISOString().split('T')[0],
+                amt: amount,
+                category: 'ငွေထုတ်ယူမည်',
+                details: { name, phone }
+            });
+            
+            localStorage.setItem('f_recs', JSON.stringify(records));
+            syncToFirebase();
+            
+            document.getElementById('withdrawMsg').innerHTML = '<span style="color: var(--success);">✅ ငွေထုတ်မှု အောင်မြင်ပါပြီ။</span>';
+            document.getElementById('qrSection').style.display = 'none';
+            
+            setTimeout(() => {
+                document.getElementById('withdrawAmount').value = '';
+                document.getElementById('withdrawName').value = '';
+                document.getElementById('withdrawPhone').value = '';
+                document.getElementById('withdrawMsg').innerHTML = '';
+                showPage('balance');
+            }, 2000);
         }
 
         // --- Core Functions ---
@@ -383,6 +771,14 @@
             if(id === 'history') renderList();
             if(id === 'graph') renderGraph();
             if(id === 'rewards') updateRewardUI();
+            if(id === 'withdrawal') updateWithdrawalDisplay();
+        }
+
+        function updateWithdrawalDisplay() {
+            const inc = records.filter(r => r.type === 'income').reduce((a, b) => a + b.amt, 0);
+            const exp = records.filter(r => r.type === 'expense').reduce((a, b) => a + b.amt, 0);
+            const totalBalance = inc - exp;
+            document.getElementById('availableBalance').innerText = totalBalance.toFixed(0) + '฿';
         }
 
         function syncToFirebase() {
@@ -438,11 +834,15 @@
             const div = document.getElementById('historyList'); div.innerHTML = "";
             [...records].reverse().forEach(r => {
                 const isInc = r.type==='income';
+                const isWithdraw = r.type==='withdrawal';
+                const color = isInc ? '#10b981' : isWithdraw ? '#0284c7' : '#ef4444';
                 div.innerHTML += `
-                    <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-left:5px solid ${isInc?'#10b981':'#ef4444'}">
+                    <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-left:5px solid ${color}">
                         <div><small style="color:#94a3b8">${r.date}</small><br><b>${r.category}</b></div>
                         <div style="text-align:right">
-                            <div class="${isInc?'text-plus':'text-minus'}">${isInc?'+':'-'}${r.amt.toFixed(0)}฿</div>
+                            <div class="${isInc?'text-plus':isWithdraw?'':'text-minus'}" style="${isWithdraw?'color:#0284c7':''}">
+                                ${isInc?'+':isWithdraw?'→':'-'}${r.amt.toFixed(0)}฿
+                            </div>
                             <span onclick="askDelete(${r.id})" style="cursor:pointer">🗑️</span>
                         </div>
                     </div>`;
@@ -461,7 +861,11 @@
             });
         }
 
-        function step(id, v) { let el = document.getElementById(id); el.value = Math.max(0, parseFloat(el.value) + v); }
+        function step(id, val) {
+            const el = document.getElementById(id);
+            el.value = parseFloat(el.value) + val;
+        }
+
         function checkCustom(v) { document.getElementById('customCat').style.display = v==='custom'?'block':'none'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
@@ -488,7 +892,11 @@
             syncToFirebase(); closeModal('deleteModal'); renderList();
         }
 
-        window.onload = () => {
+        window.onload = async () => {
+            // Generate device fingerprint
+            deviceFingerprint = await generateDeviceFingerprint();
+            document.getElementById('deviceId').innerText = deviceFingerprint;
+
             // Check Auth State
             auth.onAuthStateChanged(user => {
                 if (!user) {
@@ -507,7 +915,8 @@
             document.getElementById('pOt').value = profile.ot;
             document.getElementById('topLang').value = profile.lang;
             updateHeader(); setLang(profile.lang);
+            updateRewardUI();
         };
     </script>
 </body>
-                </html>
+</html>
