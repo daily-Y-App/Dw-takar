@@ -539,6 +539,10 @@
             }
         }).catch(err => {
             console.error("Redirect Result Error:", err);
+            const loading = document.getElementById('loginLoading');
+            const btn = document.getElementById('googleLoginBtn');
+            if (loading) loading.style.display = 'none';
+            if (btn) btn.style.display = 'flex';
         });
 
         function logout() {
@@ -867,9 +871,7 @@
         window.onload = () => {
             // Check Auth State
             auth.onAuthStateChanged(user => {
-                if (!user) {
-                    document.getElementById('loginModal').style.display = 'flex';
-                } else {
+                if (user) {
                     currentUser = user;
                     profile.email = user.email;
                     profile.name = user.displayName || profile.name;
@@ -887,6 +889,11 @@
                         document.getElementById('userEmail').innerText = user.email;
                         document.getElementById('loginModal').style.display = 'none';
                     });
+                } else {
+                    // Only show modal if NOT in the middle of a redirect
+                    if (!window.location.hash.includes('access_token')) {
+                        document.getElementById('loginModal').style.display = 'flex';
+                    }
                 }
             });
 
