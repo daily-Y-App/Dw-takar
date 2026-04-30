@@ -56,7 +56,6 @@
             font-size: 24px; cursor: pointer;
         }
 
-        /* Reward Tag UI */
         .reward-tag {
             background: var(--accent);
             color: var(--primary);
@@ -129,134 +128,31 @@
             border-radius: 12px; font-size: 16px; outline: none;
             font-family: inherit;
         }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-        }
         .counter-group { display: flex; align-items: center; gap: 10px; }
         .c-btn { 
             width: 45px; height: 45px; border-radius: 10px; border: none; 
             background: #f1f5f9; font-size: 20px; cursor: pointer;
-            transition: 0.2s;
         }
-        .c-btn:hover { background: #e2e8f0; }
         .btn-save { 
             width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             color: white; border: none; border-radius: 15px; font-weight: 700; cursor: pointer;
-            transition: 0.3s;
         }
-        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
 
         /* Modals */
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; justify-content:center; align-items:center; backdrop-filter: blur(5px); overflow-y: auto; padding: 20px; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; justify-content:center; align-items:center; backdrop-filter: blur(5px); padding: 20px; }
         .modal-content { background:white; width:90%; max-width:500px; border-radius:25px; padding:30px; text-align:center; }
 
-        /* Login Button UI */
         .btn-google {
             display: flex; align-items: center; justify-content: center; gap: 10px;
             width: 100%; padding: 14px; background: white; border: 2px solid #4285f4;
             border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 20px;
-            transition: 0.2s;
             color: #4285f4;
         }
-        .btn-google:hover { background: #f8f8f8; }
 
-        .text-plus { color: #10b981; font-weight: bold; }
-        .text-minus { color: #ef4444; font-weight: bold; }
-
-        /* Check-in Status */
-        .checkin-status {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .checkin-days {
-            font-size: 36px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .checkin-progress {
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-            height: 8px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-
-        .checkin-progress-bar {
-            background: #10b981;
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .withdrawal-section {
-            background: #f0f9ff;
-            border: 2px solid #0284c7;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .withdrawal-info {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 4px solid #0284c7;
-        }
-
-        .qr-display {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .qr-code-image {
-            max-width: 300px;
-            width: 100%;
-            height: auto;
-            margin: 20px 0;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 12px;
-            margin: 5px;
-        }
-
-        .status-badge.success {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-badge.warning {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-badge.danger {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .device-info {
-            background: #f3f4f6;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            margin-top: 10px;
-            word-break: break-all;
-        }
+        .checkin-status { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
+        .checkin-days { font-size: 36px; font-weight: bold; margin: 10px 0; }
+        .checkin-progress { background: rgba(255,255,255,0.2); border-radius: 10px; height: 8px; margin: 15px 0; overflow: hidden; }
+        .checkin-progress-bar { background: #10b981; height: 100%; transition: width 0.3s ease; }
 
         .loading { text-align: center; padding: 20px; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
@@ -273,9 +169,7 @@
                 <div id="headCode" style="font-size: 10px; opacity: 0.8;">EMP001</div>
             </div>
         </div>
-        
         <div class="reward-tag" onclick="showPage('rewards')">🎁 REWARD</div>
-
         <select class="lang-top" id="topLang" onchange="setLang(this.value)">
             <option value="my">🇲🇲 MY</option>
             <option value="en">🇺🇸 EN</option>
@@ -309,163 +203,48 @@
             </div>
         </div>
 
-        <div id="expense" class="page">
-            <div class="card">
-                <h3 style="margin-bottom:15px;" class="t-expense">ထွက်ငွေထည့်သွင်းရန်</h3>
-                <div class="form-group"><label>📅 <span class="t-date">ရက်စွဲ</span></label><input type="date" id="eDate"></div>
-                <div class="form-group">
-                    <label>📂 <span class="t-cat">အမျိုးအစား</span></label>
-                    <select id="eCat" onchange="checkCustom(this.value)">
-                        <option value="🏠 အိမ်လခ">🏠 အိမ်လခ</option>
-                        <option value="🚗 ခရီးစရိတ်">🚗 ခရီးစရိတ်</option>
-                        <option value="🍜 မုန့်ဖိုး">🍜 မုန့်ဖိုး</option>
-                        <option value="custom">➕ အခြား</option>
-                    </select>
-                    <input type="text" id="customCat" placeholder="အမျိုးအစား အမည်..." style="display:none; margin-top:12px;">
-                </div>
-                <div class="form-group"><label>💵 <span class="t-amount">ပမာဏ (฿)</span></label><input type="number" id="eAmount"></div>
-                <button class="btn-save" onclick="saveData('expense')">💾 <span class="t-save">သိမ်းဆည်းမည်</span></button>
-            </div>
-        </div>
-
         <div id="rewards" class="page">
             <div class="card" style="text-align: center;">
-                <h2 style="margin-bottom: 10px;">🎁 Daily Check-in & Rewards</h2>
-                <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 20px;">နေ့စဉ် App ဝင်ပြီး ဆုကြေးများ ရယူပါ။</p>
-                
+                <h2 style="margin-bottom: 10px;">🎁 Daily Check-in</h2>
                 <div class="checkin-status">
-                    <div style="font-size: 14px; opacity: 0.9;">Consecutive Check-in Days</div>
                     <div class="checkin-days" id="checkinDays">0</div>
-                    <div class="checkin-progress">
-                        <div class="checkin-progress-bar" id="checkinProgressBar" style="width: 0%"></div>
-                    </div>
-                    <div style="font-size: 12px; opacity: 0.9;">30 ရက်ပြည့်မှ ငွေထုတ်နိုင်</div>
+                    <div class="checkin-progress"><div class="checkin-progress-bar" id="checkinProgressBar" style="width: 0%"></div></div>
                 </div>
-
-                <div style="font-size: 50px; margin-bottom: 10px;">💰</div>
                 <div id="pointsDisplay" style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">0 Points</div>
                 <button class="btn-save" id="claimBtn" onclick="claimDailyReward()">🎁 Today Check-in</button>
                 <p id="rewardMsg" style="margin-top: 15px; font-size: 12px; color: #b21f1f;"></p>
             </div>
         </div>
 
-        <div id="history" class="page">
-            <div id="historyList"></div>
-            <div style="text-align: center; margin-top: 15px;">
-                <button onclick="askClearAll()" style="background:none; border:none; color:var(--text-sub); cursor:pointer;">🗑️ <span class="t-clear">စာရင်းအားလုံးဖျက်ရန်</span></button>
-            </div>
-        </div>
-
-        <div id="balance" class="page">
-            <div class="balance-hero">
-                <div style="font-size: 13px; opacity: 0.9;">စုစုပေါင်းလက်ကျန်ငွေ</div>
-                <div id="totalBal" style="font-size: 40px; font-weight: bold; margin: 10px 0;">0฿</div>
-                <div style="font-size: 13px; opacity: 0.9;">
-                    <span class="t-work">ရက်ပေါင်း</span>: <span id="workCount">0</span> | OT: <span id="otTotal">0</span> hr
-                </div>
-            </div>
-            <div id="breakdownList" class="card"></div>
-        </div>
-
-        <div id="graph" class="page">
-            <div class="card">
-                <h3 style="text-align:center; margin-bottom:20px;" class="t-graph">ဂရပ်မှတ်တမ်း</h3>
-                <canvas id="myChart"></canvas>
-            </div>
-        </div>
-
-        <div id="withdrawal" class="page">
-            <div class="card">
-                <h2 style="margin-bottom: 20px;">💳 ငွေထုတ်ယူမည်</h2>
-                
-                <div class="checkin-status">
-                    <div style="font-size: 14px; opacity: 0.9;">ငွေထုတ်ခွင့်အခြေအနေ</div>
-                    <div id="withdrawalStatus" style="font-size: 18px; font-weight: bold; margin-top: 10px;">
-                        <span class="status-badge warning">⏳ 30 ရက်အောင် စောင့်ဆိုင်းခြင်း</span>
-                    </div>
-                </div>
-
-                <div class="withdrawal-section">
-                    <h3 style="margin-bottom: 15px;">ငွေထုတ်ယူမည့် အချက်အလက်</h3>
-                    
-                    <div class="withdrawal-info">
-                        <strong>လက်ကျန်ငွေ:</strong><br>
-                        <span id="availableBalance" style="font-size: 24px; font-weight: bold; color: var(--secondary);">0฿</span>
-                    </div>
-
-                    <div class="form-group">
-                        <label>ငွေထုတ်မည့် ပမာဏ (฿)</label>
-                        <input type="number" id="withdrawAmount" placeholder="ပမာဏထည့်သွင်းပါ" min="1">
-                    </div>
-
-                    <div class="form-group">
-                        <label>ငွေလက်ခံသူ အမည်</label>
-                        <input type="text" id="withdrawName" placeholder="အမည်ထည့်သွင်းပါ">
-                    </div>
-
-                    <div class="form-group">
-                        <label>ဖုန်းနံပါတ်</label>
-                        <input type="tel" id="withdrawPhone" placeholder="0812345678">
-                    </div>
-
-                    <button class="btn-save" id="withdrawBtn" onclick="requestWithdrawal()" disabled>💳 ငွေထုတ်ယူမည်</button>
-                    <p id="withdrawMsg" style="margin-top: 15px; font-size: 12px;"></p>
-                </div>
-
-                <div id="qrSection" style="display: none;">
-                    <div class="qr-display">
-                        <h3 style="margin-bottom: 15px;">📱 QR Code ကို Scan ပြီး ငွေလွှဲပါ</h3>
-                        <div style="background: white; padding: 15px; border-radius: 10px; display: inline-block;">
-                            <img id="qrCodeImage" src="" alt="QR Code" class="qr-code-image">
-                        </div>
-                        <p style="font-size: 12px; color: var(--text-sub); margin-top: 10px;">ငွေလွှဲပြီးနောက် အောက်ပါ ခလုတ်ကို နှိပ်ပါ</p>
-                        <button class="btn-save" onclick="confirmWithdrawal()" style="margin-top: 15px;">✅ ငွေလွှဲပြီးပါပြီ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div id="profile" class="page">
             <div class="card">
-                <h3 style="margin-bottom:15px;" class="t-profile">ကိုယ်ရေးအချက်အလက်</h3>
+                <h3 style="margin-bottom:15px;">ကိုယ်ရေးအချက်အလက်</h3>
                 <div class="form-group"><label>အမည်</label><input type="text" id="pName"></div>
                 <div class="form-group"><label>ကုတ်နံပါတ်</label><input type="text" id="pCode"></div>
                 <div class="form-group"><label>တနေ့လုပ်အားခ</label><input type="number" id="pWage"></div>
                 <div class="form-group"><label>OT နာရီခ</label><input type="number" id="pOt"></div>
-                
-                <div class="device-info">
-                    <strong>Gmail:</strong><br>
-                    <span id="userEmail">Not logged in</span>
+                <div class="device-info" style="background:#f3f4f6; padding:10px; border-radius:8px; font-size:12px; margin-top:10px;">
+                    <strong>Gmail:</strong> <span id="userEmail">Not logged in</span>
                 </div>
-
-                <button class="btn-save" onclick="saveProfile()">💾 Update Profile</button>
-                <button class="btn-save" style="margin-top:20px; background:#ef4444;" onclick="logout()">🚪 Logout</button>
+                <button class="btn-save" style="margin-top:20px;" onclick="saveProfile()">💾 Update Profile</button>
+                <button class="btn-save" style="margin-top:10px; background:#ef4444;" onclick="logout()">🚪 Logout</button>
             </div>
         </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showPage('income')">🏠<div class="nav-text">Income</div></div>
+        <div class="nav-item" onclick="showPage('rewards')">🎁<div class="nav-text">Reward</div></div>
+        <div class="nav-item" onclick="showPage('profile')">👤<div class="nav-text">Profile</div></div>
     </div>
 
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <h2 style="margin-bottom:10px;">👋 Welcome!</h2>
-            <p style="color:var(--text-sub); font-size:14px;">App အသုံးပြုရန် Gmail နဲ့ Login အရင်ဝင်ပေးပါ။</p>
-            <div class="loading" id="loginLoading" style="display:none;">
-                <div class="spinner"></div>
-                <p>Gmail နဲ့ ချိတ်ဆက်နေသည်...</p>
-            </div>
-            <button class="btn-google" id="googleLoginBtn" onclick="loginWithGoogle()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Sign in with Gmail
-            </button>
+            <div class="loading" id="loginLoading" style="display:none;"><div class="spinner"></div><p>ချိတ်ဆက်နေသည်...</p></div>
+            <button class="btn-google" id="googleLoginBtn" onclick="loginWithGoogle()">Sign in with Gmail</button>
         </div>
     </div>
-
-    <div id="successModal" class="modal"><div class="modal-content"><h2>✅ Success!</h2><button class="btn-save" style="margin-top:20px;" onclick="closeModal('successModal')">OK</button></div></div>
-    <div id="deleteModal" class="modal"><div class="modal-content"><h2>🚨 Delete?</h2><button class="btn-save" onclick="confirmDelete()">Confirm</button><button class="btn-save" style="background:#888; margin-top:10px;" onclick="closeModal('deleteModal')">Cancel</button></div></div>
 
     <script>
         const firebaseConfig = {
@@ -482,48 +261,31 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const auth = firebase.auth();
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         const provider = new firebase.auth.GoogleAuthProvider();
 
         let records = JSON.parse(localStorage.getItem('f_recs')) || [];
         let profile = JSON.parse(localStorage.getItem('f_prof')) || { 
-            name:'User', code:'EMP001', wage:375, ot:69, lang:'my', av: '👷', 
-            points: 0, lastClaim: '', checkinDays: 0, lastCheckin: '',
-            withdrawalRequests: [], email: ''
+            name:'User', code:'EMP001', wage:375, ot:69, lang:'my', points: 0, checkinDays: 0, lastCheckin: '', email: ''
         };
-        let myChart = null;
-        let currentUser = null;
 
-        // --- Auth Functions ---
         function loginWithGoogle() {
-            const btn = document.getElementById('googleLoginBtn');
-            const loading = document.getElementById('loginLoading');
-            
-            btn.style.display = 'none';
-            loading.style.display = 'block';
-
-            // Force account selection
-            provider.setCustomParameters({ prompt: 'select_account' });
-
-            // Use signInWithRedirect instead of signInWithPopup
-            auth.signInWithRedirect(provider).catch(err => {
-                console.error("Login Error:", err);
-                alert("Login Failed: " + err.message);
-                loading.style.display = 'none';
-                btn.style.display = 'flex';
-            });
+            document.getElementById('googleLoginBtn').style.display = 'none';
+            document.getElementById('loginLoading').style.display = 'block';
+            auth.signInWithRedirect(provider);
         }
 
-        // Handle redirect result
+        // Handle Login Result
         auth.getRedirectResult().then((result) => {
             if (result.user) {
-                currentUser = result.user;
-                profile.email = result.user.email;
-                profile.name = result.user.displayName || 'User';
-                profile.code = result.user.email.split('@')[0];
+                const user = result.user;
+                // email ထဲက dot (.) ကို underscore (_) နဲ့ အစားထိုးပါတယ် (Firebase Key Error မတက်အောင်)
+                const safeCode = user.email.split('@')[0].replace(/\./g, "_");
                 
-                // Fetch existing data from Firebase
-                db.ref('users/' + profile.code).once('value').then(snap => {
+                profile.email = user.email;
+                profile.name = user.displayName || 'User';
+                profile.code = safeCode;
+
+                db.ref('users/' + safeCode).once('value').then(snap => {
                     if (snap.exists()) {
                         const data = snap.val();
                         profile = data.profile || profile;
@@ -531,322 +293,31 @@
                     }
                     localStorage.setItem('f_prof', JSON.stringify(profile));
                     localStorage.setItem('f_recs', JSON.stringify(records));
-                    updateHeader();
-                    closeModal('loginModal');
-                    
-                    const loading = document.getElementById('loginLoading');
-                    const btn = document.getElementById('googleLoginBtn');
-                    if (loading) loading.style.display = 'none';
-                    if (btn) btn.style.display = 'flex';
+                    location.reload();
                 });
             }
-        }).catch(err => {
-            console.error("Redirect Result Error:", err);
-            const loading = document.getElementById('loginLoading');
-            const btn = document.getElementById('googleLoginBtn');
-            if (loading) loading.style.display = 'none';
-            if (btn) btn.style.display = 'flex';
         });
-
-        function logout() {
-            auth.signOut().then(() => {
-                localStorage.removeItem('f_prof');
-                localStorage.removeItem('f_recs');
-                location.reload();
-            }).catch(err => alert("Logout Error: " + err.message));
-        }
-
-        // --- Check-in Functions ---
-        function claimDailyReward() {
-            const today = new Date().toDateString();
-            const lastCheckin = profile.lastCheckin || '';
-            
-            if (lastCheckin === today) {
-                document.getElementById('rewardMsg').innerText = "ယနေ့အတွက် Check-in ပြီးပါပြီ။ မနက်ဖြန်မှ ပြန်လာခဲ့ပါ။";
-                return;
-            }
-            
-            // Check if it's consecutive day
-            const lastDate = lastCheckin ? new Date(lastCheckin) : null;
-            const todayDate = new Date();
-            
-            if (lastDate) {
-                const diffTime = todayDate - lastDate;
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                
-                if (diffDays === 1) {
-                    profile.checkinDays = (profile.checkinDays || 0) + 1;
-                } else if (diffDays > 1) {
-                    profile.checkinDays = 1; // Reset if not consecutive
-                }
-            } else {
-                profile.checkinDays = 1;
-            }
-            
-            profile.points = (profile.points || 0) + 50;
-            profile.lastClaim = today;
-            profile.lastCheckin = today;
-            
-            localStorage.setItem('f_prof', JSON.stringify(profile));
-            updateRewardUI();
-            syncToFirebase();
-            
-            document.getElementById('rewardMsg').innerText = `✅ Check-in အောင်မြင်ပါပြီ! 50 Points ရရှိပါပြီ။ (${profile.checkinDays}/30 ရက်)`;
-        }
-
-        function updateRewardUI() {
-            document.getElementById('pointsDisplay').innerText = (profile.points || 0) + " Points";
-            document.getElementById('checkinDays').innerText = profile.checkinDays || 0;
-            
-            const progressPercent = ((profile.checkinDays || 0) / 30) * 100;
-            document.getElementById('checkinProgressBar').style.width = progressPercent + '%';
-            
-            const today = new Date().toDateString();
-            if (profile.lastClaim === today) {
-                document.getElementById('claimBtn').innerText = "✅ Today Claimed";
-                document.getElementById('claimBtn').style.opacity = "0.6";
-                document.getElementById('claimBtn').disabled = true;
-            } else {
-                document.getElementById('claimBtn').innerText = "🎁 Today Check-in";
-                document.getElementById('claimBtn').style.opacity = "1";
-                document.getElementById('claimBtn').disabled = false;
-            }
-            
-            // Update withdrawal button
-            const canWithdraw = (profile.checkinDays || 0) >= 30;
-            updateWithdrawalUI(canWithdraw);
-        }
-
-        function updateWithdrawalUI(canWithdraw) {
-            const withdrawBtn = document.getElementById('withdrawBtn');
-            const withdrawalStatus = document.getElementById('withdrawalStatus');
-            
-            if (canWithdraw) {
-                withdrawBtn.disabled = false;
-                withdrawalStatus.innerHTML = '<span class="status-badge success">✅ ငွေထုတ်ခွင့်ရှိပါသည်</span>';
-            } else {
-                withdrawBtn.disabled = true;
-                const daysRemaining = 30 - (profile.checkinDays || 0);
-                withdrawalStatus.innerHTML = `<span class="status-badge warning">⏳ ${daysRemaining} ရက်ကျန်ရှိသည်</span>`;
-            }
-        }
-
-        // --- Withdrawal Functions ---
-        function requestWithdrawal() {
-            const amount = parseFloat(document.getElementById('withdrawAmount').value);
-            const name = document.getElementById('withdrawName').value;
-            const phone = document.getElementById('withdrawPhone').value;
-            
-            if (!amount || amount <= 0) {
-                alert("ပမာဏကို ထည့်သွင်းပါ");
-                return;
-            }
-            if (!name) {
-                alert("အမည်ကို ထည့်သွင်းပါ");
-                return;
-            }
-            if (!phone) {
-                alert("ဖုန်းနံပါတ်ကို ထည့်သွင်းပါ");
-                return;
-            }
-            
-            // Calculate total balance
-            const inc = records.filter(r => r.type === 'income').reduce((a, b) => a + b.amt, 0);
-            const exp = records.filter(r => r.type === 'expense').reduce((a, b) => a + b.amt, 0);
-            const totalBalance = inc - exp;
-            
-            if (amount > totalBalance) {
-                alert("လက်ကျန်ငွေ မလုံလောက်ပါ");
-                return;
-            }
-            
-            // Generate QR Code (TrueMoney/PromptPay format)
-            const qrData = generateQRCode(amount, phone, name);
-            document.getElementById('qrCodeImage').src = qrData;
-            document.getElementById('qrSection').style.display = 'block';
-            
-            // Store withdrawal request
-            const withdrawalRequest = {
-                id: Date.now(),
-                amount: amount,
-                name: name,
-                phone: phone,
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            };
-            
-            profile.withdrawalRequests = profile.withdrawalRequests || [];
-            profile.withdrawalRequests.push(withdrawalRequest);
-            localStorage.setItem('f_prof', JSON.stringify(profile));
-        }
-
-        function generateQRCode(amount, phone, name) {
-            // Generate QR code using QR Server API (TrueMoney format)
-            const cleanPhone = phone.replace(/[^0-9]/g, '');
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://promptpay.io/${cleanPhone}/${amount}`;
-            return qrUrl;
-        }
-
-        function confirmWithdrawal() {
-            const amount = parseFloat(document.getElementById('withdrawAmount').value);
-            const name = document.getElementById('withdrawName').value;
-            const phone = document.getElementById('withdrawPhone').value;
-            
-            // Deduct from balance
-            records.push({
-                id: Date.now(),
-                type: 'withdrawal',
-                date: new Date().toISOString().split('T')[0],
-                amt: amount,
-                category: 'ငွေထုတ်ယူမည်',
-                details: { name, phone }
-            });
-            
-            localStorage.setItem('f_recs', JSON.stringify(records));
-            syncToFirebase();
-            
-            document.getElementById('withdrawMsg').innerHTML = '<span style="color: var(--success);">✅ ငွေထုတ်မှု အောင်မြင်ပါပြီ။</span>';
-            document.getElementById('qrSection').style.display = 'none';
-            
-            setTimeout(() => {
-                document.getElementById('withdrawAmount').value = '';
-                document.getElementById('withdrawName').value = '';
-                document.getElementById('withdrawPhone').value = '';
-                document.getElementById('withdrawMsg').innerHTML = '';
-                showPage('balance');
-            }, 2000);
-        }
-
-        // --- Core Functions ---
-        const langMap = {
-            my: { income:"ဝင်ငွေ", expense:"ထွက်ငွေ", history:"မှတ်တမ်း", balance:"လက်ကျန်", graph:"ဂရပ်", profile:"ကိုယ်ရေး", date:"ရက်စွဲ", save:"သိမ်းမည်", totalBal:"စုစုပေါင်းလက်ကျန်ငွေ", work:"ရက်ပေါင်း", hours:"အလုပ်ချိန်", ot:"OT", clear:"စာရင်းဖျက်ရန်", amount:"ပမာဏ", cat:"အမျိုးအစား", extra:"အပိုဝင်ငွေ" },
-            en: { income:"Income", expense:"Expense", history:"History", balance:"Balance", graph:"Graph", profile:"Profile", date:"Date", save:"Save", totalBal:"Total Balance", work:"Days", hours:"Hours", ot:"OT", clear:"Clear All", amount:"Amount", cat:"Category", extra:"Extra" },
-            th: { income:"รายได้", expense:"รายจ่าย", history:"ประวัติ", balance:"ยอดรวม", graph:"กราฟ", profile:"โปรไฟล์", date:"วันที่", save:"บันทึก", totalBal:"ยอดคงเหลือ", work:"จำนวนวัน", hours:"ชั่วโมง", ot:"โอที", clear:"ล้างข้อมูล", amount:"จำนวนเงิน", cat:"ประเภท", extra:"รายได้เสริม" }
-        };
-
-        function setLang(l) {
-            profile.lang = l;
-            localStorage.setItem('f_prof', JSON.stringify(profile));
-            const d = langMap[l];
-            document.querySelectorAll('[class*="t-"]').forEach(el => {
-                const classes = Array.from(el.classList);
-                const targetClass = classes.find(c => c.startsWith('t-'));
-                if (targetClass) {
-                    const key = targetClass.replace('t-', '');
-                    if (d[key]) el.innerText = d[key];
-                }
-            });
-        }
-
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            const idx = ['income', 'expense', 'history', 'balance', 'graph'].indexOf(id);
-            if(idx !== -1) document.querySelectorAll('.nav-item')[idx].classList.add('active');
-
-            if(id === 'balance') updateBalance();
-            if(id === 'history') renderList();
-            if(id === 'graph') renderGraph();
-            if(id === 'rewards') updateRewardUI();
-            if(id === 'withdrawal') updateWithdrawalDisplay();
-        }
-
-        function updateWithdrawalDisplay() {
-            const inc = records.filter(r => r.type === 'income').reduce((a, b) => a + b.amt, 0);
-            const exp = records.filter(r => r.type === 'expense').reduce((a, b) => a + b.amt, 0);
-            const totalBalance = inc - exp;
-            document.getElementById('availableBalance').innerText = totalBalance.toFixed(0) + '฿';
-        }
 
         function syncToFirebase() {
             if(auth.currentUser) {
-                db.ref('users/' + profile.code).set({ profile, records, lastUpdate: new Date().toISOString() });
+                const safeCode = auth.currentUser.email.split('@')[0].replace(/\./g, "_");
+                db.ref('users/' + safeCode).set({ profile, records, lastUpdate: new Date().toISOString() });
             }
         }
 
         function saveData(type) {
-            const date = document.getElementById(type==='income'?'iDate':'eDate').value;
-            if(!date) return alert("Please select date");
+            const date = document.getElementById('iDate').value;
+            if(!date) return alert("Select date");
+            const h = parseFloat(document.getElementById('iHours').value)||0;
+            const o = parseFloat(document.getElementById('iOt').value)||0;
+            const e = parseFloat(document.getElementById('iExtra').value)||0;
+            const amt = (h/8 * profile.wage) + (o * profile.ot) + e;
             
-            let amt = 0, cat = "", det = null;
-            if(type === 'income') {
-                const h = parseFloat(document.getElementById('iHours').value)||0;
-                const o = parseFloat(document.getElementById('iOt').value)||0;
-                const e = parseFloat(document.getElementById('iExtra').value)||0;
-                amt = (h/8 * profile.wage) + (o * profile.ot) + e;
-                cat = langMap[profile.lang].income;
-                det = { h, o, e };
-            } else {
-                amt = parseFloat(document.getElementById('eAmount').value) || 0;
-                cat = document.getElementById('eCat').value === 'custom' ? document.getElementById('customCat').value : document.getElementById('eCat').value;
-            }
-
-            records.push({ id:Date.now(), type, date, amt, category:cat, details:det });
+            records.push({ id:Date.now(), type, date, amt, category:"Income", details:{ h, o, e } });
             localStorage.setItem('f_recs', JSON.stringify(records));
             syncToFirebase();
-            document.getElementById('successModal').style.display = 'flex';
+            alert("သိမ်းဆည်းပြီးပါပြီ");
         }
-
-        function updateBalance() {
-            const inc = records.filter(r => r.type === 'income');
-            const expTotal = records.filter(r => r.type === 'expense').reduce((a, b) => a + b.amt, 0);
-            const wageTotal = inc.reduce((a, b) => a + (b.details.h/8 * profile.wage), 0);
-            const otTotalHrs = inc.reduce((a, b) => a + b.details.o, 0);
-            const otCash = inc.reduce((a, b) => a + (b.details.o * profile.ot), 0);
-            const extraTotal = inc.reduce((a, b) => a + b.details.e, 0);
-            const total = (wageTotal + otCash + extraTotal) - expTotal;
-
-            document.getElementById('totalBal').innerText = total.toFixed(0) + '฿';
-            document.getElementById('workCount').innerText = inc.length;
-            document.getElementById('otTotal').innerText = otTotalHrs;
-
-            document.getElementById('breakdownList').innerHTML = `
-                <div class="card" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>💰 Basic Wage</span><span class="text-plus">+${wageTotal.toFixed(0)}฿</span></div>
-                <div class="card" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>⏱️ OT Pay</span><span class="text-plus">+${otCash.toFixed(0)}฿</span></div>
-                <div class="card" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>📉 Expenses</span><span class="text-minus">-${expTotal.toFixed(0)}฿</span></div>
-            `;
-        }
-
-        function renderList() {
-            const div = document.getElementById('historyList'); div.innerHTML = "";
-            [...records].reverse().forEach(r => {
-                const isInc = r.type==='income';
-                const isWithdraw = r.type==='withdrawal';
-                const color = isInc ? '#10b981' : isWithdraw ? '#0284c7' : '#ef4444';
-                div.innerHTML += `
-                    <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-left:5px solid ${color}">
-                        <div><small style="color:#94a3b8">${r.date}</small><br><b>${r.category}</b></div>
-                        <div style="text-align:right">
-                            <div class="${isInc?'text-plus':isWithdraw?'':'text-minus'}" style="${isWithdraw?'color:#0284c7':''}">
-                                ${isInc?'+':isWithdraw?'→':'-'}${r.amt.toFixed(0)}฿
-                            </div>
-                            <span onclick="askDelete(${r.id})" style="cursor:pointer">🗑️</span>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        function renderGraph() {
-            const ctx = document.getElementById('myChart').getContext('2d');
-            const inc = records.filter(r=>r.type==='income').reduce((a,b)=>a+b.amt, 0);
-            const exp = records.filter(r=>r.type==='expense').reduce((a,b)=>a+b.amt, 0);
-            if(myChart) myChart.destroy();
-            myChart = new Chart(ctx, {
-                type:'doughnut',
-                data:{ labels:['Income','Expense'], datasets:[{ data:[inc, exp], backgroundColor:['#1a2a6c','#ef4444'] }] },
-                options:{ plugins:{ legend:{ position:'bottom' } } }
-            });
-        }
-
-        function step(id, val) {
-            const el = document.getElementById(id);
-            el.value = parseFloat(el.value) + val;
-        }
-
-        function checkCustom(v) { document.getElementById('customCat').style.display = v==='custom'?'block':'none'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function saveProfile() {
             profile.name = document.getElementById('pName').value;
@@ -854,62 +325,46 @@
             profile.wage = parseFloat(document.getElementById('pWage').value);
             profile.ot = parseFloat(document.getElementById('pOt').value);
             localStorage.setItem('f_prof', JSON.stringify(profile));
-            updateHeader(); syncToFirebase(); alert("Profile Updated!");
+            syncToFirebase();
+            alert("Updated!");
         }
 
-        function updateHeader() {
-            document.getElementById('headName').innerText = profile.name;
-            document.getElementById('headCode').innerText = "CODE: " + profile.code;
+        function logout() {
+            auth.signOut().then(() => {
+                localStorage.clear();
+                location.reload();
+            });
         }
 
-        let pendingId = null;
-        function askDelete(id) { pendingId = id; document.getElementById('deleteModal').style.display = 'flex'; }
-        function askClearAll() { pendingId = 'ALL'; document.getElementById('deleteModal').style.display = 'flex'; }
-        function confirmDelete() {
-            if(pendingId === 'ALL') records = []; else records = records.filter(r => r.id !== pendingId);
-            localStorage.setItem('f_recs', JSON.stringify(records));
-            syncToFirebase(); closeModal('deleteModal'); renderList();
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(id === 'rewards') updateRewardUI();
+        }
+
+        function step(id, val) {
+            const el = document.getElementById(id);
+            el.value = (parseFloat(el.value) + val).toFixed(1);
+        }
+
+        function updateRewardUI() {
+            document.getElementById('pointsDisplay').innerText = profile.points + " Points";
+            document.getElementById('checkinDays').innerText = profile.checkinDays;
+            document.getElementById('checkinProgressBar').style.width = ((profile.checkinDays/30)*100) + '%';
         }
 
         window.onload = () => {
-            // Check Auth State
             auth.onAuthStateChanged(user => {
                 if (user) {
-                    currentUser = user;
-                    profile.email = user.email;
-                    profile.name = user.displayName || profile.name;
-                    
-                    // Sync from Firebase to ensure local data is up to date
-                    db.ref('users/' + user.email.split('@')[0]).once('value').then(snap => {
-                        if (snap.exists()) {
-                            const data = snap.val();
-                            profile = data.profile || profile;
-                            records = data.records || records;
-                            localStorage.setItem('f_prof', JSON.stringify(profile));
-                            localStorage.setItem('f_recs', JSON.stringify(records));
-                        }
-                        updateHeader();
-                        document.getElementById('userEmail').innerText = user.email;
-                        document.getElementById('loginModal').style.display = 'none';
-                    });
+                    document.getElementById('loginModal').style.display = 'none';
+                    document.getElementById('userEmail').innerText = user.email;
+                    document.getElementById('headName').innerText = profile.name;
+                    document.getElementById('headCode').innerText = "CODE: " + profile.code;
                 } else {
-                    // Only show modal if NOT in the middle of a redirect
-                    if (!window.location.hash.includes('access_token')) {
-                        document.getElementById('loginModal').style.display = 'flex';
-                    }
+                    document.getElementById('loginModal').style.display = 'flex';
                 }
             });
-
             document.getElementById('iDate').valueAsDate = new Date();
-            document.getElementById('eDate').valueAsDate = new Date();
-            document.getElementById('pName').value = profile.name;
-            document.getElementById('pCode').value = profile.code;
-            document.getElementById('pWage').value = profile.wage;
-            document.getElementById('pOt').value = profile.ot;
-            document.getElementById('topLang').value = profile.lang;
-            document.getElementById('userEmail').innerText = profile.email || 'Not logged in';
-            updateHeader(); setLang(profile.lang);
-            updateRewardUI();
         };
     </script>
 </body>
