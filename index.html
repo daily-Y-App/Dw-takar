@@ -502,6 +502,9 @@
             btn.style.display = 'none';
             loading.style.display = 'block';
 
+            // Force account selection
+            provider.setCustomParameters({ prompt: 'select_account' });
+
             // Use signInWithRedirect instead of signInWithPopup
             auth.signInWithRedirect(provider).catch(err => {
                 console.error("Login Error:", err);
